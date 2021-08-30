@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 class Archivo {
   constructor(title, price, thumbnail, txt) {
     (this.title = title), (this.price = price);
@@ -11,7 +11,7 @@ class Archivo {
         `./archivos/${this.txt}`,
         "utf-8"
       );
-      console.log(contenido);
+      console.log(JSON.parse(contenido).map((x) => x.title));
       console.log("Archivo leido!");
     } catch (err) {
       console.log(err);
@@ -62,5 +62,4 @@ const prueba = new Archivo(
   "http//www...",
   "productos.txt"
 );
-prueba.guardar();
 prueba.leer();
