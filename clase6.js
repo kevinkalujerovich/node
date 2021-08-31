@@ -11,7 +11,7 @@ class Archivo {
         `./archivos/${this.txt}`,
         "utf-8"
       );
-      console.log(JSON.parse(contenido).map((x) => x.title));
+      console.log(JSON.parse(contenido));
       console.log("Archivo leido!");
     } catch (err) {
       console.log(err);
@@ -62,4 +62,8 @@ const prueba = new Archivo(
   "http//www...",
   "productos.txt"
 );
-prueba.leer();
+const foo = async () => {
+  await prueba.leer();
+  prueba.guardar();
+};
+foo();

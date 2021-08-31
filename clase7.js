@@ -3,42 +3,37 @@ import fs from "fs";
 const app = express();
 const PORT = 8081;
 let visitas = 0;
+let visitas2 = 0;
 
 const server = app.listen(PORT, () => {
   console.log("Servidor HTTP escuchando en el puerto", server.address().port);
 });
 server.on("error", (error) => console.log("Error en servidor", error));
 
-app.get("/visitas", (req, res) => {
-  res.send(`La cantidad de visitas es ${++visitas}`);
+app.get("/items", (req, res) => {
+  console.log("request a get recbido!");
+  const data = JSON.parse(fs.readFileSync("./archivos/productos.txt", "utf-8"));
+  const obj = { items: data, cantidad: data.length };
+  res.json(obj);
+  console.log("El puerto de conexion es " + PORT);
+  ++visitas;
 });
-
-app.get("/", (req, res) => {
-  console.log("request a get recibido!");
-  // res.send('Vamos River!');
-  res.json({ msg: "Ahora si funscasdasdiona!" });
-});
-
-app.get("/api/mensajes", (req, res) => {
-  console.log("request a api/mensajes recibido!");
-  const objRes = {
-    msg: "Hola Mundosss!",
-    saludos: 1000,
-    error: false,
+app.get("/items-random", (req, res) => {
+  const aleatorio = (minimo, maximo) => {
+    return Math.floor(Math.random() * (maximo + 1 - minimo) + minimo);
   };
-  res.json(objRes);
+  console.log("request a get recbido!");
+  const data = JSON.parse(fs.readFileSync("./archivos/productos.txt", "utf-8"));
+  const obj = { item: data[aleatorio(1, data.length)] };
+  res.json(obj);
+  console.log("El puerto de conexion es " + PORT);
+  ++visitas2;
 });
-const foo = async () => {
-  try {
-    const contenido = await fs.promises.readFile(
-      `./archivos/productos.txt`,
-      "utf-8"
-    );
-    console.log(contenido);
-    console.log("Archivo leido!");
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-foo();
+app.get("/visitas", (req, res) => {
+  const obj = {
+    visitas: { items: "/items", item: visitas },
+    visitas2: { items: "/items-random", item: visitas2 },
+  };
+  res.json(obj);
+  console.log("El puerto de conexion es " + PORT);
+});
