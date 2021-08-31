@@ -1,0 +1,26 @@
+{
+  "type":"module",
+  "name": "node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "nodemon.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevinkalujerovich/node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kevinkalujerovich/node/issues"
+  },
+  "homepage": "https://github.com/kevinkalujerovich/node#readme",
+  "dependencies": {
+    "@types/node": "^16.7.1",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.12"
+  },
+  "devDependencies": {}
+}
