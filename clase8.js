@@ -28,7 +28,7 @@ app.get("/api/productos/listar/:id", (req, res) => {
   res.json(found);
 });
 
-app.get("/api/productos/guardar", (req, res) => {
+app.post("/api/productos/guardar", (req, res) => {
   let body = req.body;
   const producto = new Guardar(
     body.title,
