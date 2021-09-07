@@ -1,5 +1,5 @@
-export default class Guardar {
+module.exports = class Guardar {
   constructor(title, price, id) {
-    (this.title = title), (this.price = price), (this.id = id);
+    (this.title = title), (this.price = parseInt(price)), (this.id = id);
   }
-}
+};

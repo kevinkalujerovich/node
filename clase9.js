@@ -1,5 +1,5 @@
-import express from "express";
-import Guardar from "./guardarform.js";
+const express = require("express");
+const Guardar = require("./guardarform.js");
 
 const app = express();
 const PORT = 8080;
@@ -40,8 +40,28 @@ router.get("/listar/:id", (req, res) => {
     : res.json(found);
 });
 
-router.delete("/borrar", (req, res) => {
-  let params = req.params;
-  res.json(params);
-  console.log("asdasdasda");
+router.delete("/borrar/:id", (req, res) => {
+  const params = parseInt(req.params.id);
+  const element = productos.find((elemento) => elemento.id === params);
+  !element
+    ? res
+        .status(404)
+        .json({ error: "producto no encontrado, no se pudo borrar" })
+    : (productos.splice(productos.indexOf(element), 1), res.json(element));
+});
+router.put("/actualizar/:id", (req, res) => {
+  let params = parseInt(req.params.id);
+  if (productos.some((elemento) => elemento.id === params)) {
+    productos.map((elemento) => {
+      if (elemento.id === params) {
+        (elemento.title = "se actualizo"), (elemento.price = "se actualizo");
+      }
+    });
+    const obj = productos.find((elemento) => elemento.id === params);
+    res.json(obj);
+  } else {
+    res
+      .status(404)
+      .json({ error: "producto no encontrado, no se pudo modicar" });
+  }
 });
