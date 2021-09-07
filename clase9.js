@@ -27,7 +27,12 @@ router.get("/listar", (req, res) => {
 
 router.post("/guardar", (req, res) => {
   let body = req.body;
-  const producto = new Guardar(body.title, body.price, productos.length + 1);
+  const producto = new Guardar(
+    body.title,
+    body.price,
+    body.thumbnail,
+    productos.length + 1
+  );
   productos.push(producto);
   res.json({ operacion: "Objeto guardado" });
 });
@@ -54,7 +59,9 @@ router.put("/actualizar/:id", (req, res) => {
   if (productos.some((elemento) => elemento.id === params)) {
     productos.map((elemento) => {
       if (elemento.id === params) {
-        (elemento.title = "se actualizo"), (elemento.price = "se actualizo");
+        (elemento.title = req.body.title),
+          (elemento.price = req.body.price),
+          (elemento.thumbnail = req.body.thumbnail);
       }
     });
     const obj = productos.find((elemento) => elemento.id === params);
@@ -64,4 +71,5 @@ router.put("/actualizar/:id", (req, res) => {
       .status(404)
       .json({ error: "producto no encontrado, no se pudo modicar" });
   }
+  res.json(obj);
 });
