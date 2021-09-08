@@ -17,11 +17,10 @@ app.use(express.static("public"));
 const server = app.listen(PORT, () => {
   console.log("Servidor HTTP escuchando en el puerto", server.address().port);
 });
-server.on("error", (error) => console.log("Error en servidor", error));
 
 router.get("/listar", (req, res) => {
   productos.length === 0
-    ? res.status(404).json({ error: "no hay productos cargados" })
+    ? res.json({ error: "no hay productos cargados" })
     : res.json(productos);
 });
 
@@ -40,18 +39,14 @@ router.post("/guardar", (req, res) => {
 router.get("/listar/:id", (req, res) => {
   let params = req.params;
   const found = productos.find((element) => element.id === parseInt(params.id));
-  !found
-    ? res.status(404).json({ error: "producto no encontrado" })
-    : res.json(found);
+  !found ? res.json({ error: "producto no encontrado" }) : res.json(found);
 });
 
 router.delete("/borrar/:id", (req, res) => {
   const params = parseInt(req.params.id);
   const element = productos.find((elemento) => elemento.id === params);
   !element
-    ? res
-        .status(404)
-        .json({ error: "producto no encontrado, no se pudo borrar" })
+    ? res.json({ error: "producto no encontrado, no se pudo borrar" })
     : (productos.splice(productos.indexOf(element), 1), res.json(element));
 });
 router.put("/actualizar/:id", (req, res) => {
@@ -67,9 +62,7 @@ router.put("/actualizar/:id", (req, res) => {
     const obj = productos.find((elemento) => elemento.id === params);
     res.json(obj);
   } else {
-    res
-      .status(404)
-      .json({ error: "producto no encontrado, no se pudo modicar" });
+    res.json({ error: "producto no encontrado, no se pudo modicar" });
   }
   res.json(obj);
 });
