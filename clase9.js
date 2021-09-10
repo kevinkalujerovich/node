@@ -1,11 +1,21 @@
 const express = require("express");
 const Guardar = require("./guardarform.js");
-
+const multer = require("multer");
 const app = express();
 const PORT = 8080;
 const router = express.Router();
 
 const productos = [];
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "-" + Date.now());
+  },
+});
+
+const upload = multer({ storage });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,6 +40,7 @@ router.post("/guardar", (req, res) => {
     body.title,
     body.price,
     body.thumbnail,
+    body.myFile,
     productos.length + 1
   );
   productos.push(producto);
@@ -50,19 +61,14 @@ router.delete("/borrar/:id", (req, res) => {
     : (productos.splice(productos.indexOf(element), 1), res.json(element));
 });
 router.put("/actualizar/:id", (req, res) => {
-  let params = parseInt(req.params.id);
-  if (productos.some((elemento) => elemento.id === params)) {
-    productos.map((elemento) => {
-      if (elemento.id === params) {
-        (elemento.title = req.body.title),
-          (elemento.price = req.body.price),
-          (elemento.thumbnail = req.body.thumbnail);
-      }
-    });
+  try {
+    let params = parseInt(req.params.id);
     const obj = productos.find((elemento) => elemento.id === params);
+    (obj.title = req.body.title),
+      (obj.price = req.body.price),
+      (obj.thumbnail = req.body.thumbnail);
     res.json(obj);
-  } else {
+  } catch (error) {
     res.json({ error: "producto no encontrado, no se pudo modicar" });
   }
-  res.json(obj);
 });
