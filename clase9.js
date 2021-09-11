@@ -56,9 +56,11 @@ router.get("/listar/:id", (req, res) => {
 router.delete("/borrar/:id", (req, res) => {
   const params = parseInt(req.params.id);
   const element = productos.find((elemento) => elemento.id === params);
-  !element
-    ? res.json({ error: "producto no encontrado, no se pudo borrar" })
-    : (productos.splice(productos.indexOf(element), 1), res.json(element));
+  try {
+    productos.splice(productos.indexOf(element), 1), res.json(element);
+  } catch (error) {
+    res.json({ error: "producto no encontrado, no se pudo borrar" });
+  }
 });
 router.put("/actualizar/:id", (req, res) => {
   try {
