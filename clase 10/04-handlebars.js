@@ -55,7 +55,10 @@ app.put("/actualizar/:id", (req, res) => {
   try {
     let params = parseInt(req.params.id);
     const obj = productos.find((elemento) => elemento.id === params);
-    (obj.title = req.body.title), (obj.price = req.body.price), res.json(obj);
+    (obj.title = req.body.title),
+      (obj.price = req.body.price),
+      (obj.thumbnail = req.body.thumbnail),
+      res.json(obj);
   } catch (error) {
     res.json({ error: "producto no encontrado, no se pudo modicar" });
   }
