@@ -1,0 +1,39 @@
+{{#if guardar}}
+{{> guardar}}
+{{/if}}
+{{#if noHayProductos}}
+<div class="container text-center pt-5">
+  <h1>No hay productos</h1>
+  </div>
+{{/if}}
+{{#if hayProductos}}
+<h1 class="text-center">Vista de productos</h1>
+<div class="container text-center pt-5 " >
+<div class="container bg-dark text-white" >
+    <div class="row" >
+    <div class="col-sm pt-2" >
+     Nombre
+    </div>
+    <div class="col-sm pt-2" >
+      Precio
+    </div>
+    <div class="col-sm pt-2" >
+    Foto
+    </div>
+  </div>
+        {{#each productos}}
+  <div class="row pt-2 pb-2" >
+    <div class="col-sm pt-2" style=" border-top: 1px solid white">
+     {{this.title}}
+    </div>
+    <div class="col-sm pt-2" style=" border-top: 1px solid white" >
+      {{this.price}}
+    </div>
+    <div class="col-sm pt-2" style=" border-top: 1px solid white" >
+        <img width="50px" height="50px" src= {{this.thumbnail}}>
+    </div>
+  </div>
+  {{/each}}
+</div>
+</div>
+{{/if}}
