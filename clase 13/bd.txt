@@ -1,0 +1,30 @@
+[
+	{
+		"autor": "Mariano",
+		"texto": "Hola a tod@s!"
+	},
+	{
+		"autor": "asd",
+		"texto": "asd",
+		"fecha": "24/9/2021",
+		"hora": "12:37:16"
+	},
+	{
+		"autor": "la comisaria ",
+		"texto": "bajo palabra",
+		"fecha": "24/9/2021",
+		"hora": "12:37:52"
+	},
+	{
+		"autor": "sss",
+		"texto": "sss",
+		"fecha": "24/9/2021",
+		"hora": "12:38:10"
+	},
+	{
+		"autor": "ultimo",
+		"texto": "mensaje",
+		"fecha": "24/9/2021",
+		"hora": "21:42:32"
+	}
+]
