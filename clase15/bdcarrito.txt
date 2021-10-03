@@ -1,0 +1,42 @@
+[
+	{
+		"title": "actualizado desde html",
+		"description": "actualizado desde html",
+		"codigo": "100",
+		"thumbnail": "https://cdn4.iconfinder.com/data/icons/people-avatar-filled-outline/64/old_glasses_people_man_grandfather_avatar_beard-512.png",
+		"price": "1",
+		"stock": "1",
+		"id": 1,
+		"timestamp": 1633233363217
+	},
+	{
+		"title": "e",
+		"description": "e",
+		"codigo": "1",
+		"thumbnail": "https://cdn4.iconfinder.com/data/icons/people-avatar-filled-outline/64/old_glasses_people_man_grandfather_avatar_beard-512.png",
+		"price": "1",
+		"stock": "1",
+		"id": 2,
+		"timestamp": 1633233410878
+	},
+	{
+		"title": "e",
+		"description": "e",
+		"codigo": "1",
+		"thumbnail": "https://cdn4.iconfinder.com/data/icons/people-avatar-filled-outline/64/old_glasses_people_man_grandfather_avatar_beard-512.png",
+		"price": "123123",
+		"stock": "1",
+		"id": 3,
+		"timestamp": 1633233462418
+	},
+	{
+		"title": "e",
+		"description": "e",
+		"codigo": "1",
+		"thumbnail": "https://cdn4.iconfinder.com/data/icons/people-avatar-filled-outline/64/old_glasses_people_man_grandfather_avatar_beard-512.png",
+		"price": "123123",
+		"stock": "1",
+		"id": 3,
+		"timestamp": 1633233462418
+	}
+]
