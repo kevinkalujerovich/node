@@ -86,6 +86,8 @@ const actualizarProducto = (parametro) => {
       "https://cdn4.iconfinder.com/data/icons/people-avatar-filled-outline/64/old_glasses_people_man_grandfather_avatar_beard-512.png",
     price: "1",
     stock: "1",
+    id: parametro,
+    timestamp: Date.now(),
   };
   fetch(`http://localhost:8080/productos/actualizar/${parametro}`, {
     method: "PUT",

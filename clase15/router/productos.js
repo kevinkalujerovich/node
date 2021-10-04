@@ -2,14 +2,16 @@ const express = require("express");
 const router = express.Router();
 const fs = require("fs");
 
-const productosFull = JSON.parse(fs.readFileSync("./bdproductos.txt", "utf-8"));
+var productosFull;
 const administrador = true;
 
 router.get("/listar", (req, res) => {
+  productosFull = JSON.parse(fs.readFileSync("./bdproductos.txt", "utf-8"));
   res.json(productosFull);
 });
 
 router.get("/listar/:id", (req, res) => {
+  productosFull = JSON.parse(fs.readFileSync("./bdproductos.txt", "utf-8"));
   let params = req.params;
   const found = productosFull.find(
     (element) => element.id === parseInt(params.id)
@@ -21,6 +23,7 @@ router.get("/listar/:id", (req, res) => {
 
 router.post("/agregar", (req, res) => {
   if (administrador) {
+    productosFull = JSON.parse(fs.readFileSync("./bdproductos.txt", "utf-8"));
     productosFull.push({
       ...req.body,
       id: productosFull.length + 1,
@@ -41,6 +44,7 @@ router.post("/agregar", (req, res) => {
 router.put("/actualizar/:id", (req, res) => {
   if (administrador) {
     try {
+      productosFull = JSON.parse(fs.readFileSync("./bdproductos.txt", "utf-8"));
       let params = parseInt(req.params.id);
       const obj = productosFull.find((elemento) => elemento.id === params);
       (obj.title = req.body.title),
@@ -68,6 +72,7 @@ router.put("/actualizar/:id", (req, res) => {
 
 router.delete("/borrar/:id", (req, res) => {
   if (administrador) {
+    productosFull = JSON.parse(fs.readFileSync("./bdproductos.txt", "utf-8"));
     const params = parseInt(req.params.id);
     const element = productosFull.find((elemento) => elemento.id === params);
     if (element) {
