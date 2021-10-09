@@ -6,7 +6,7 @@ socket.on("envioProductos", (data) => {
         (e, i) => `
   <div class="row pt-2 pb-2" >
     <div class="col-sm pt-2" style=" border-top: 1px solid white">
-     ${e.name}
+     ${e.title}
     </div>
     <div class="col-sm pt-2" style=" border-top: 1px solid white" >
     ${e.price}

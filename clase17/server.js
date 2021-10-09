@@ -1,17 +1,17 @@
 const express = require("express");
 const app = express();
-const http = require("http").Server(app);
-const io = require("socket.io")(http);
 const { options } = require("./options/mariaDB");
 const knex = require("knex")(options);
 
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("./public"));
-app.use("/productos", require("./router/productos"));
-http.listen(3030, () => console.log("escuchando..."));
+http.listen(8080, () => console.log("escuchando..."));
 
+app.use("/productos", require("./router/productos"));
 let mensajes = [];
 
 io.on("connection", (socket) => {

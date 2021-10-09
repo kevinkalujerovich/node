@@ -8,7 +8,6 @@ router.get("/listar", (req, res) => {
     .select("*")
     .then((data) => {
       res.json(data);
-      socket.emit("envioProducto", "asda");
     })
     .catch((e) => {
       console.log("Error en Select:", e);
@@ -23,6 +22,7 @@ router.get("/listar/:id", (req, res) => {
     .where("id", "=", req.params.id)
     .then((data) => {
       res.json(data);
+      socket.emit("envioProducto", envio);
     })
     .catch((e) => {
       console.log("Error en Select:", e);

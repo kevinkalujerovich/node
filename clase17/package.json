@@ -1,7 +1,8 @@
 {
-  "name": "clase17",
+  "name": "clase-9",
   "version": "1.0.0",
-  "main": "createTable.js",
+  "description": "",
+  "main": "01-router.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -9,11 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-    "knex": "^0.21.17",
-"mysql": "^2.18.1",
-    "socket.io": "^4.2.0"
-  },
-  "devDependencies": {},
-  "keywords": [],
-  "description": ""
+    "knex": "^0.95.11",
+    "mysql": "^2.18.1",
+    "node-fetch": "^3.0.0",
+    "socket.io": "^2.2.0"
+  }
 }
