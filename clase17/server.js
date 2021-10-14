@@ -3,6 +3,8 @@ const handlebars = require("express-handlebars");
 
 const { options } = require("./options/mariaDB");
 const knex = require("knex")(options);
+const { options2 } = require("./options/SQLite3");
+const mensajesKnex = require("knex")(options2);
 
 const app = express();
 const http = require("http").Server(app);
@@ -25,9 +27,9 @@ app.engine(
 app.set("views", "./views");
 app.set("view engine", "hbs");
 
-let mensajes = [];
 io.on("connection", (socket) => {
   console.log("alguien se está conectado...");
+
   knex
     .from("productos")
     .select("*")
@@ -39,14 +41,36 @@ io.on("connection", (socket) => {
       console.log("Error en Select:", e);
       knex.destroy();
     });
+  mensajesKnex
+    .select("*")
+    .from("mensajes")
+    .then((data) => {
+      socket.emit("mensajes", data);
+    })
+    .catch((e) => {
+      console.log("Error getting products: ", e);
+      prodsKnex.destroy();
+    });
 
-  socket.on("envioProducto", (data) => {
-    console.log(data);
-  });
-
-  socket.emit("mensajes", mensajes);
   socket.on("nuevo-mensaje", (data) => {
-    mensajes.push(data);
-    io.sockets.emit("mensajes", mensajes);
+    mensajesKnex("mensajes")
+      .insert(data)
+      .then(() => {
+        console.log("Mensaje insertado");
+      })
+      .catch((e) => {
+        console.log("Error en Insert message: ", e);
+        mensajesKnex.destroy;
+      });
+    mensajesKnex
+      .select("*")
+      .from("mensajes")
+      .then((data) => {
+        socket.emit("mensajes", data);
+      })
+      .catch((e) => {
+        console.log("Error getting products: ", e);
+        prodsKnex.destroy();
+      });
   });
 });

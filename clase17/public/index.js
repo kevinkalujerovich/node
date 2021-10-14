@@ -38,15 +38,6 @@ socket.on("envioProductos", (data) => {
   }
 });
 
-function enviarDatos() {
-  let envio = {
-    name: document.getElementById("name").value,
-    price: document.getElementById("price").value,
-    thumbnail: document.getElementById("thumbnail").value,
-  };
-  socket.emit("envioProducto", envio);
-}
-
 socket.on("mensajes", (data) => {
   render(data);
 });
@@ -56,9 +47,9 @@ let render = (data) => {
     .map(
       (e, i) => `
       <div>
-          <strong class="text-primary font-weight-bold">${e.autor}</strong>
-          <span class="text-danger">[${e.fecha} ${e.hora}]</span>
-          <em class="text-success">${e.texto}</em>
+          <strong class="text-primary font-weight-bold">${e.usuario}</strong>
+          <span class="text-danger">[${e.fecha},${e.hora}]</span>
+          <em class="text-success">${e.mensaje}</em>
       </div>
   `
     )
@@ -72,8 +63,8 @@ function enviarMensaje(e) {
   const mm = today.getMonth() + 1;
   const yyyy = today.getFullYear();
   let envio = {
-    autor: document.getElementById("usuario").value,
-    texto: document.getElementById("texto").value,
+    usuario: document.getElementById("usuario").value,
+    mensaje: document.getElementById("texto").value,
     fecha: dd.toString() + "/" + mm.toString() + "/" + yyyy.toString(),
     hora:
       today.getHours().toString() +
