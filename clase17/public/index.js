@@ -4,17 +4,31 @@ socket.on("envioProductos", (data) => {
     let html = data
       .map(
         (e, i) => `
-  <div class="row pt-2 pb-2" >
-    <div class="col-sm pt-2" style=" border-top: 1px solid white">
-     ${e.title}
-    </div>
-    <div class="col-sm pt-2" style=" border-top: 1px solid white" >
-    ${e.price}
-    </div>
-    <div class="col-sm pt-2" style=" border-top: 1px solid white" >
-        <img width="50px" height="50px" src=  ${e.thumbnail}>
-    </div>
-  </div>
+        <div class="row pt-2 pb-3 text-center">
+        <div class="col-sm pt-2" style=" border-top: 1px solid white">
+         ${e.id}
+        </div>
+          <div class="col-sm pt-2" style=" border-top: 1px solid white">
+          ${e.title}
+        </div>
+          <div class="col-sm pt-2" style=" border-top: 1px solid white">
+          ${e.description}
+        </div>
+        <div class="col-sm pt-2" style=" border-top: 1px solid white" >
+        ${e.codigo}
+        </div>
+          <div class="col-sm pt-2" style=" border-top: 1px solid white">
+          ${e.price}
+        </div>  <div class="col-sm pt-2" style=" border-top: 1px solid white">
+        ${e.stock}
+        </div>
+          <div class="col-sm pt-2" style=" border-top: 1px solid white">
+          ${e.timestamp}
+        </div>
+        <div class="col-sm pt-2" style=" border-top: 1px solid white" >
+            <img width="50px" height="50px" src= ${e.thumbnail}>
+        </div>
+      </div>
 `
       )
       .join(" ");
