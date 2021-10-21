@@ -1,9 +1,8 @@
 show dbs
-use prueba
+use ecommerce
 db.createCollection("productos")
 db.createCollection("mensajes")
 show collections
-use productos
  db.productos.insert([
 {id:1,title:"producto1",description:"description de producto1",codigo:1,thumnail:"https://ww...",price:120,stock:100},
 {id:2,title:"producto1",description:"description de producto1",codigo:1,thumnail:"https://ww...",price:580,stock:100},
@@ -17,7 +16,6 @@ use productos
 {id:10,title:"producto1",description:"description de producto1",codigo:1,thumnail:"https://ww...",price:4990,stock:100}
 ])
 show collections
-use mensajes
  db.mensajes.insert([
 {usuario:"email1@gmail.com",mensaje:"hola",fecha:"24/9/2021",hora:"12:37:52"},
 {usuario:"email2@gmail.com",mensaje:"hola",fecha:"24/9/2021",hora:"12:38:52"},
@@ -28,11 +26,10 @@ use mensajes
 db.mensajes.find()
 db.productos.find()
 db.productos.count()
-use mensajes
 db.mensajes.count()
 db.productos.insert({id:11,title:"producto11",description:"description de producto11",codigo:11,thumnail:"https://ww...",price:3500,stock:100})
 db.productos.find({price:{$lt:1000}})
-> db.productos.find( { $and:[ { price: { $gte: 1000 } }, { price: { $lte: 3000 } } ]})
+db.productos.find( { $and:[ { price: { $gte: 1000 } }, { price: { $lte: 3000 } } ]})
 db.productos.find({price:{$gt:3000}})
 db.productos.update({}, {$set: {stock:100}}, false, true);
 db.productos.updateMany({price:{$gt:4000}}, {$set: {stock:0}}, true);
