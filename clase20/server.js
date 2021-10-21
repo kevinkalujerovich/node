@@ -1,6 +1,13 @@
+const express = require("express");
+const handlebars = require("express-handlebars");
+
+const app = express();
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
 const mongoose = require("mongoose");
-const Producto = require("./models/producto");
 const URI = "mongodb://localhost:27017/mongo";
+const Producto = require("./models/producto");
+const Mensaje = require("./models/mensajes");
 mongoose.connect(
   URI,
   {
@@ -12,23 +19,48 @@ mongoose.connect(
     if (error) {
       throw "Error al conectarse a la base de datos";
     } else {
-      console.log("Conectado a la base de datos...");
+      console.log("Conectado a la base de datos desde server");
     }
   }
 );
-const objProducto = new Producto({
-  name: "laptop",
-  description: "lenovo thinkpad x1 carbon 6th generation",
-  price: 1300.99,
-});
-Producto.insertMany(objProducto, (error) => {
-  if (error) {
-    throw "Error al grabar estudiantes " + error;
-  } else {
-    console.log(`Estudiantes grabados...`);
-  }
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-Producto.find().then((data) => {
-  console.log(data);
+app.use(express.static("./public"));
+http.listen(8080, () => console.log("escuchando..."));
+app.use("/productos", require("./router/productos"));
+app.engine(
+  "hbs",
+  handlebars({
+    extname: ".hbs",
+    defaultLayout: "index.hbs",
+    layoutsDir: __dirname + "/views/layouts",
+    partialsDir: __dirname + "/views/partials",
+  })
+);
+app.set("views", "./views");
+app.set("view engine", "hbs");
+
+io.on("connection", (socket) => {
+  console.log("conectando a sockets");
+
+  Producto.find().then((data) => {
+    io.sockets.emit("envioProductos", data);
+  });
+  Mensaje.find().then((data) => {
+    io.sockets.emit("mensajes", data);
+  });
+
+  socket.on("nuevo-mensaje", (data) => {
+    Mensaje.insertMany(data)
+      .then(() => {
+        console.log("Mensaje guardado");
+        Mensaje.find().then((data) => {
+          io.sockets.emit("mensajes", data);
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
 });
