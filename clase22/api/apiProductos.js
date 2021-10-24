@@ -1,12 +1,14 @@
-const express = require("express");
-const router = express.Router();
 const bdconection = require("../bdconection");
 const Producto = require("../models/producto");
+const generador = require("../generador/productos");
+const fakebd = require("../models/fakebd");
 bdconection();
-router.get("/", function (req, res) {
+
+const index = (req, res) => {
   res.render("main");
-});
-router.get("/listar", (req, res) => {
+};
+
+const listar = (req, res) => {
   try {
     Producto.find().then((data) => {
       res.json({
@@ -21,9 +23,9 @@ router.get("/listar", (req, res) => {
       status: 404,
     });
   }
-});
+};
 
-router.get("/listar/:id", (req, res) => {
+const listarId = (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.json({
       response: [],
@@ -32,6 +34,7 @@ router.get("/listar/:id", (req, res) => {
   }
   try {
     Producto.find({ _id: req.params.id }).then((data) => {
+      console.log(data);
       res.json({
         response: data,
         message: "Success",
@@ -44,9 +47,9 @@ router.get("/listar/:id", (req, res) => {
       status: 404,
     });
   }
-});
+};
 
-router.post("/guardar", (req, res) => {
+const guardar = (req, res) => {
   try {
     const obj = { ...req.body };
     Producto.insertMany(obj, (error) => {
@@ -66,15 +69,15 @@ router.post("/guardar", (req, res) => {
       status: 404,
     });
   }
-});
+};
 
-router.delete("/borrar/:id", (req, res) => {
-  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+const borrar = (req, res) => {
+  /*  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.json({
       response: [],
       message: "No se encuentra un producto con ese id",
     });
-  }
+  } */
   try {
     Producto.deleteMany({ _id: req.params.id }).then(() => {
       res.json({
@@ -88,14 +91,14 @@ router.delete("/borrar/:id", (req, res) => {
       status: 404,
     });
   }
-});
-router.put("/actualizar/:id", function (req, res) {
-  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+};
+const actualizar = (req, res) => {
+  /*   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.json({
       response: [],
       message: "No se encuentra un producto con ese id",
     });
-  }
+  } */
   const obj = req.body;
   try {
     Producto.updateOne(
@@ -122,5 +125,29 @@ router.put("/actualizar/:id", function (req, res) {
       status: 404,
     });
   }
-});
-module.exports = router;
+};
+
+const vistaTest = (req, res) => {
+  try {
+    const cantidad = req.query.cant || 10;
+    for (let i = 0; i < cantidad; i++) {
+      fakebd.productos.push(generador.producto());
+    }
+    res.render("main", { vistaTest: true, productos: fakebd.productos });
+  } catch (error) {
+    res.json({
+      message: "ERROR",
+      status: 404,
+    });
+  }
+};
+
+module.exports = {
+  listar,
+  listarId,
+  guardar,
+  borrar,
+  actualizar,
+  index,
+  vistaTest,
+};

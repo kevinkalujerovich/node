@@ -4,6 +4,7 @@ const handlebars = require("express-handlebars");
 const app = express();
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
+const router = require("./router/rutas");
 const bdconection = require("./bdconection");
 const Producto = require("./models/producto");
 const Mensaje = require("./models/mensajes");
@@ -12,8 +13,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("./public"));
+
+app.use("/productos", router.set());
 http.listen(8080, () => console.log("escuchando..."));
-app.use("/productos", require("./router/productos"));
+
 app.engine(
   "hbs",
   handlebars({
@@ -49,3 +52,7 @@ io.on("connection", (socket) => {
       });
   });
 });
+app.get("*", router.notFound);
+app.post("*", router.notFound);
+app.put("*", router.notFound);
+app.delete("*", router.notFound);
