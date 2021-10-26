@@ -5,10 +5,25 @@ const app = express();
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
 const router = require("./router/rutas");
-const bdconection = require("./bdconection");
 const Producto = require("./models/producto");
 const Mensaje = require("./models/mensajes");
-bdconection();
+const mongoose = require("mongoose");
+const URI = "mongodb://localhost:27017/mongo";
+mongoose.connect(
+  URI,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 1000,
+  },
+  (error) => {
+    if (error) {
+      throw "Error al conectarse a la base de datos";
+    } else {
+      console.log("Conectado a la base de datos");
+    }
+  }
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

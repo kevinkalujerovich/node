@@ -1,3 +1,5 @@
+const express = require("express");
+const router = express.Router();
 const mongoose = require("mongoose");
 const URI = "mongodb://localhost:27017/mongo";
 mongoose.connect(
@@ -11,19 +13,16 @@ mongoose.connect(
     if (error) {
       throw "Error al conectarse a la base de datos";
     } else {
-      console.log("Conectado a la base de datos");
+      console.log("Conectado a la base de datos de mongoose desde api");
     }
   }
 );
+
 const Producto = require("../models/producto");
-const generador = require("../generador/productos");
-const fakebd = require("../models/fakebd");
-
-const index = (req, res) => {
+router.get("/", function (req, res) {
   res.render("main");
-};
-
-const listar = (req, res) => {
+});
+router.get("/listar", (req, res) => {
   try {
     Producto.find().then((data) => {
       res.json({
@@ -38,9 +37,9 @@ const listar = (req, res) => {
       status: 404,
     });
   }
-};
+});
 
-const listarId = (req, res) => {
+router.get("/listar/:id", (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.json({
       response: [],
@@ -49,7 +48,6 @@ const listarId = (req, res) => {
   }
   try {
     Producto.find({ _id: req.params.id }).then((data) => {
-      console.log(data);
       res.json({
         response: data,
         message: "Success",
@@ -62,9 +60,9 @@ const listarId = (req, res) => {
       status: 404,
     });
   }
-};
+});
 
-const guardar = (req, res) => {
+router.post("/guardar", (req, res) => {
   try {
     const obj = { ...req.body };
     Producto.insertMany(obj, (error) => {
@@ -84,9 +82,9 @@ const guardar = (req, res) => {
       status: 404,
     });
   }
-};
+});
 
-const borrar = (req, res) => {
+router.delete("/borrar/:id", (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.json({
       response: [],
@@ -106,8 +104,8 @@ const borrar = (req, res) => {
       status: 404,
     });
   }
-};
-const actualizar = (req, res) => {
+});
+router.put("/actualizar/:id", function (req, res) {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.json({
       response: [],
@@ -140,29 +138,5 @@ const actualizar = (req, res) => {
       status: 404,
     });
   }
-};
-
-const vistaTest = (req, res) => {
-  try {
-    const cantidad = req.query.cant || 10;
-    for (let i = 0; i < cantidad; i++) {
-      fakebd.productos.push(generador.producto());
-    }
-    res.render("main", { vistaTest: true, productos: fakebd.productos });
-  } catch (error) {
-    res.json({
-      message: "ERROR",
-      status: 404,
-    });
-  }
-};
-
-module.exports = {
-  listar,
-  listarId,
-  guardar,
-  borrar,
-  actualizar,
-  index,
-  vistaTest,
-};
+});
+module.exports = router;
