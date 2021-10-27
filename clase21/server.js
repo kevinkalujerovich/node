@@ -5,6 +5,8 @@ const app = express();
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
 
+const Producto = require("./models/producto");
+const mongoose = require("mongoose");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -24,8 +26,6 @@ app.set("views", "./views");
 app.set("view engine", "hbs");
 switch (process.env.VARIABLE) {
   case "0": //Mongo Local
-    const Producto = require("./models/producto");
-    const mongoose = require("mongoose");
     const URI = "mongodb://localhost:27017/mongo";
     mongoose.connect(
       URI,
@@ -62,6 +62,7 @@ switch (process.env.VARIABLE) {
         .select("*")
         .then((data) => {
           io.sockets.emit("envioProductos", JSON.parse(JSON.stringify(data)));
+          console.log(data);
           return;
         })
         .catch((e) => {
@@ -88,6 +89,45 @@ switch (process.env.VARIABLE) {
           knex.destroy();
         });
     });
+    break;
+  case "3": //fs
+    const fs = require("fs");
+    app.use("/productos", require("./router/productosfs"));
+    io.on("connection", (socket) => {
+      console.log("conectando a sockets desde fs");
+      const productos = JSON.parse(fs.readFileSync("./db.txt", "utf-8"));
+      io.sockets.emit("envioProductos", productos);
+    });
+    break;
+  case "4": //Atlas
+    const URIATLAS =
+      "mongodb+srv://kevin:kevin@cluster0.pgiyk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+    mongoose.connect(
+      URIATLAS,
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 1000,
+      },
+      (error) => {
+        if (error) {
+          throw "Error al conectarse a la base de datos";
+        } else {
+          console.log("Conectado a la base de datos de atlas");
+        }
+      }
+    );
+
+    app.use("/productos", require("./router/productosAtlas"));
+    io.on("connection", (socket) => {
+      console.log("conectando a sockets desde mongoose ");
+
+      Producto.find().then((data) => {
+        io.sockets.emit("envioProductos", data);
+      });
+    });
+    break;
+  case "5": //Firebase
     break;
   default:
     console.log("No existe opcion");
