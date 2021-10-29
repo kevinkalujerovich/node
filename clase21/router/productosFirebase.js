@@ -13,6 +13,11 @@ router.get("/listar", (req, res) => {
       const response = docs.map((doc) => ({
         _id: doc.id,
         title: doc.data().title,
+        description: doc.data().description,
+        codigo: doc.data().codigo,
+        price: doc.data().price,
+        stock: doc.data().stock,
+        thumbnail: doc.data().thumbnail,
       }));
       res.json({
         response: response,
@@ -77,12 +82,25 @@ router.post("/guardar", (req, res) => {
 
 router.delete("/borrar/:id", (req, res) => {
   const borrar = async () => {
-    const doc = firebase.query.doc(req.params.id);
-    const item = await doc.delete();
-    res.json({
-      message: "Success",
-      status: 200,
-    });
+    const querySnapshot = await firebase.query.get();
+    let docs = querySnapshot.docs;
+    const response = docs.map((doc) => ({
+      _id: doc.id,
+    }));
+    const data = response.find((x) => x._id == req.params.id);
+    if (data) {
+      const doc = firebase.query.doc(req.params.id);
+      const item = await doc.delete();
+      res.json({
+        message: "Success",
+        status: 200,
+      });
+    } else {
+      res.json({
+        message: "ID de producto no existente",
+        status: 200,
+      });
+    }
   };
   try {
     borrar();
@@ -96,12 +114,25 @@ router.delete("/borrar/:id", (req, res) => {
 
 router.put("/actualizar/:id", function (req, res) {
   const actualizar = async () => {
-    const doc = firebase.query.doc(req.params.id);
-    const item = await doc.update(req.body);
-    res.json({
-      message: "Success",
-      status: 200,
-    });
+    const querySnapshot = await firebase.query.get();
+    let docs = querySnapshot.docs;
+    const response = docs.map((doc) => ({
+      _id: doc.id,
+    }));
+    const data = response.find((x) => x._id == req.params.id);
+    if (data) {
+      const doc = firebase.query.doc(req.params.id);
+      const item = await doc.update(req.body);
+      res.json({
+        message: "Success",
+        status: 200,
+      });
+    } else {
+      res.json({
+        message: "ID de producto no existente",
+        status: 200,
+      });
+    }
   };
 
   try {
