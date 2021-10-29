@@ -128,6 +128,32 @@ switch (process.env.VARIABLE) {
     });
     break;
   case "5": //Firebase
+    app.use("/productos", require("./router/productosFirebase"));
+
+    const firebase = require("./firebase");
+
+    async function foo() {
+      try {
+        const querySnapshot = await firebase.query.get();
+        let docs = querySnapshot.docs;
+        const response = docs.map((doc) => ({
+          _id: doc.id,
+          title: doc.data().title,
+          description: doc.data().description,
+          codigo: doc.data().codigo,
+          price: doc.data().price,
+          stock: doc.data().stock,
+          thumbnail: doc.data().thumbnail,
+        }));
+        io.on("connection", (socket) => {
+          console.log("conectando a sockets desde firebase");
+          io.sockets.emit("envioProductos", response);
+        });
+      } catch (error) {
+        console.log("Error!", error);
+      }
+    }
+    foo();
     break;
   default:
     console.log("No existe opcion");
