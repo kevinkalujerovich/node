@@ -36,8 +36,7 @@ socket.on("envioProductos", (data) => {
 });
 
 socket.on("mensajes", (data) => {
-  /* render(data); */
-  console.log(data);
+  render(data);
 });
 
 let render = (data) => {
@@ -45,11 +44,9 @@ let render = (data) => {
     .map(
       (e, i) => `
       <div>
-          <strong class="text-primary font-weight-bold">${e.id}</strong>
+          <strong class="text-primary font-weight-bold">${e.usuario}</strong>
           <span class="text-danger">[${e.fecha},${e.hora}]</span>
           <em class="text-success">${e.mensaje}</em>
-          <img width="50px" height="50px" src= ${e.avatar}>
-          <img>
       </div>
   `
     )
@@ -63,23 +60,20 @@ function enviarMensaje(e) {
   const mm = today.getMonth() + 1;
   const yyyy = today.getFullYear();
   let envio = {
-    author: {
-      id: document.getElementById("id").value,
-      nombre: document.getElementById("nombre").value,
-      apellido: document.getElementById("apellido").value,
-      edad: document.getElementById("edad").value,
-      alias: document.getElementById("alias").value,
-      avatar: document.getElementById("avatar").value,
-      fecha: dd.toString() + "/" + mm.toString() + "/" + yyyy.toString(),
-      hora:
-        today.getHours().toString() +
-        ":" +
-        today.getMinutes().toString() +
-        ":" +
-        today.getSeconds().toString(),
-    },
-    mensaje: document.getElementById("mensaje").value,
+    usuario: document.getElementById("usuario").value,
+    mensaje: document.getElementById("texto").value,
+    fecha: dd.toString() + "/" + mm.toString() + "/" + yyyy.toString(),
+    hora:
+      today.getHours().toString() +
+      ":" +
+      today.getMinutes().toString() +
+      ":" +
+      today.getSeconds().toString(),
   };
   socket.emit("nuevo-mensaje", envio);
   return false;
 }
+
+const lala = () => {
+  return (document.getElementById("santi").visibility = "hidden");
+};

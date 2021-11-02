@@ -1,0 +1,18 @@
+{{#if log}}
+{{> login}}
+{{/if}}
+{{#if loguot}}
+<div class="mt-5" id="santi"><div class="alert alert-success " role="alert">
+ <h1>Hasta luego {{nombre}}</h1> 
+</div></div>
+{{/if}}
+{{#if login}}
+<div class="mt-5" ><div class="alert alert-success " role="alert">
+ <h1>Bienvenido {{nombre}}</h1> 
+ <form method="get" action="/productos/logout" style="margin:20px;">
+      <button type="submit" class="btn btn-success mt-2"  >Loguot</button>
+       </form>
+</div></div>
+{{/if}}
+{{> guardar}}
+
