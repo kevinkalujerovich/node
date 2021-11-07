@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node js</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+        <script src="./socket.io/socket.io.js"></script>
+        <script src="index.js"></script>
+</head>
+
+<body>
+    <div class="container">
+      <div id="login" class="container mt-5">
+      </div>
+        <div class="container">
+          <div id="login"></div>
+          <form method="post" action="/productos/guardar" style="margin:20px;">
+            <h1 class="text-center">Ingrese producto</h1>
+              <div class="form-group mt-2">
+               <label >Nombre</label>
+               <input type="text" class="form-control"  placeholder="Nombre" name="title">
+             </div>
+             <div class="form-group mt-2">
+              <label >Descripcion</label>
+              <input type="text" class="form-control"  placeholder="Descripcion" name="description">
+            </div>
+            <div class="form-group mt-2">
+              <label >Codigo</label>
+              <input type="number" class="form-control"  placeholder="Codigo" name="codigo">
+            </div>
+            <div class="form-group mt-2">
+              <label >Foto URL</label>
+              <input type="text" class="form-control "  placeholder="https://cdn4.iconfinder.com/data/icons/navigation-40/24/chevron-down-512.png" name="thumbnail">
+            </div>
+             <div class="form-group mt-2">
+               <label >Precio</label>
+               <input type="number" class="form-control "  placeholder="Precio" name="price">
+             </div>
+             <div class="form-group mt-2">
+              <label >Stock</label>
+              <input type="number" class="form-control "  placeholder="Stock" name="stock">
+            </div>
+              <button type="submit" class="btn btn-success mt-2">Enviar</button>         
+               </form></div>
+        <div class="container text-center pt-5 mb-5" >
+<div class="container bg-dark text-white" >
+     <div class="row" >
+    <div class="col-sm-3 pt-2" >
+     ID
+    </div>
+    <div class="col-sm-2 pt-2" >
+      Nombre
+    </div>
+    <div class="col-sm-2 pt-2" >
+    Descripcion
+    </div>
+    <div class="col-sm-1 pt-2" >
+     Codigo
+    </div>
+    <div class="col-sm-1 pt-2" >
+     Price
+    </div>
+    <div class="col-sm-1 pt-2" >
+     Stock
+    </div>
+    <div class="col-sm-2 pt-2" >
+    Foto
+    </div>
+  </div>    
+        <div id="productos" class="mb-5 "></div>
+</div>
+        </div>
+         <div class="mb-5 pb-5 pt-5">
+    <h1>Chat en línea</h1>
+    <div id="mensajes"></div>
+    <br>
+    <form onsubmit="return enviarMensaje(this)">
+        <input type="text" id="usuario" placeholder="Su nombre...">
+        <input type="text" id="texto" placeholder="Su mensaje...">
+        <input type="submit" value="Enviar">
+    </form>
+  </div>
+    </div>
+</body>
+
+</html>

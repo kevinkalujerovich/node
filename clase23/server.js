@@ -54,47 +54,16 @@ io.on("connection", (socket) => {
     io.sockets.emit("envioProductos", data);
   });
   Mensaje.find().then((data) => {
-    const blogPost = {
-      id: 1,
-      title: "My blogspot",
-      description: "Short description",
-      content: "Hello word",
-      author: {
-        id: 1,
-        name: "John Doe",
-      },
-      comments: [
-        {
-          id: 1,
-          author: "Rob",
-          content: "Nice post!",
-        },
-        {
-          id: 2,
-          author: "Jane",
-          content: "I totally agree with you",
-        },
-      ],
-    };
+    const user = new schema.Entity("authors");
 
-    // defino el esquema de los usuarios (o comentadores)
-    const user = new schema.Entity("users");
+    const comment = new schema.Entity("mensajes");
 
-    // defino el esquema de los comentarios, que son realizados por un usuario
-    const comment = new schema.Entity("comments", {
-      commenter: user,
-    });
-
-    // defino el esquema de los articulos, que tienen un autor y una cantidad de comentarios
-    const article = new schema.Entity("articles", {
+    const article = new schema.Entity("post", {
       author: user,
       comments: [comment],
     });
-
-    // creamos el objeto normalizado
-    const normalizedData = normalize(blogPost, article);
-    print(normalizedEmpresa);
-    io.sockets.emit("mensajes", data);
+    const normalizedData = normalize(data, article);
+    io.sockets.emit("mensajes", normalizedData);
   });
 
   socket.on("nuevo-mensaje", (data) => {
