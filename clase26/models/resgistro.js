@@ -5,4 +5,4 @@ const registroSchema = new Schema({
   password: { type: String, require: true, minLength: 3, maxLenghth: 20 },
 });
 
-module.exports = model("Usuarios", registroSchema);
+module.exports = model("usuarios", registroSchema);
