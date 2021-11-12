@@ -73,11 +73,11 @@ function enviarMensaje(e) {
   socket.emit("nuevo-mensaje", envio);
   return false;
 }
-socket.on("hola", (data) => {
+socket.on("login", (data) => {
   if (data.length > 0) {
     const html = `
     <div class="alert alert-success" role="alert">Bienvenido ${
-      JSON.parse(data[0].session).nombre
+      JSON.parse(data[0].session).usuario.usuario
     }
     <button type="submit" class="btn btn-success mt-2"  onclick="logout()">Logout</button></div>`;
     document.getElementById("login").innerHTML = html;

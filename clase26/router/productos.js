@@ -131,50 +131,25 @@ router.get("/login", (req, res) => {
 
 router.post(
   "/login",
-  passport.authenticate("registro", {
+  passport.authenticate("login", {
     failureRedirect: "/loginerror.html",
     successRedirect: "/",
   })
 );
 
 router.delete("/logout", (req, res) => {
-  const nombre = req.session.nombre;
+  const nombre = req.session.usuario.usuario;
   req.session.destroy();
   res.json(nombre);
 });
-
-/* router.post("/registro", (req, res, next) =>
-  passport.authenticate("registro", function (err, user, info) {
-    console.log(info);
-  })(req, res)
-); */
 
 router.post(
   "/registro",
   passport.authenticate("registro", {
     failureRedirect: "/registroerror.html",
     successRedirect: "/",
+    session: false,
   })
 );
 
-/* router.post("/registro", (req, res) => {
-  Registro.findOne({ usuario: req.body.usuario })
-    .then((user) => {
-      if (user) {
-        res.redirect("/registroerror.html");
-      } else {
-        const obj = { ...req.body };
-        Registro.insertMany(obj, (error) => {
-          if (error) {
-            throw "Error al grabar producto " + error;
-          } else {
-            res.redirect("/login.html");
-          }
-        });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});  */
 module.exports = router;

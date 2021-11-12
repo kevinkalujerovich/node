@@ -47,119 +47,69 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("./public"));
 http.listen(8080, () => console.log("escuchando..."));
 app.use("/productos", require("./router/productos"));
+
 passport.use(
   "registro",
   new LocalStrategy(
     {
-      // or whatever you want to use
-      usernameField: "usuario", // define the parameter in req.body that passport can use as username and password
-
+      usernameField: "usuario",
+      passwordField: "password",
       passReqToCallback: true,
     },
-    function (usuario, password, done) {
-      console.log(usuario.body);
-      Registro.findOne({ usuario: usuario.body.usuario })
-        .then(function (user) {
-          if (user) {
-            return done(null, false, console.log("usuario ya existente"));
-          } else {
-            const obj = {
-              usuario: usuario.body.usuario,
-              password: usuario.body.password,
-            };
-            Registro.insertMany(obj, (error) => {
-              if (error) {
-                throw "Error al grabar producto " + error;
-              } else {
-                console.log({
-                  response: obj,
-                  message: "Success",
-                  status: 200,
-                });
-              }
-            });
-            return done(null, console.log("se agrego nuevo usuario"));
-          }
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
+    async (req, usuario, password, done) => {
+      const user = await Registro.findOne({ usuario: usuario });
+      if (user) {
+        return done(null, false, console.log("ya existe este usuario"));
+      } else {
+        const obj = { usuario: usuario, password: password };
+        Registro.insertMany(obj)
+          .then(function () {
+            console.log("Data inserted");
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        done(null, obj);
+      }
     }
   )
 );
-/* passport.use(
-  "registro",
-  new LocalStrategy(
-    {
-      passReqToCallback: true,
-    },
-    function (req, usuario, password, done) {
-      Registro.findOne({ usuario: usuario })
-        .then(function (user) {
-          if (user) {
-            return done(null, false, console.log("usuario ya existente"));
-          } else {
-            const obj = { usuario: usuario, password: password };
-            Registro.insertMany(obj, (error) => {
-              if (error) {
-                throw "Error al grabar producto " + error;
-              } else {
-                res.json({
-                  response: obj,
-                  message: "Success",
-                  status: 200,
-                });
-              }
-            });
-            return done(null, console.log("error usuario existente"));
-          }
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
-    }
-  )
-); */
 
 passport.use(
   "login",
   new LocalStrategy(
     {
+      usernameField: "usuario",
+      passwordField: "password",
       passReqToCallback: true,
     },
-    function (req, usuario, password, done) {
-      Registro.findOne({ usuario: usuario })
-        .then(function (user) {
-          if (user) {
-            if (password === user.password) {
-              return done(null, console.log("login correcto"));
-            } else {
-              return done(null, false, console.log("error de password"));
-            }
-          } else {
-            return done(null, false, console.log("error usuario existente"));
-          }
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
+    async (req, usuario, password, done) => {
+      const user = await Registro.findOne({ usuario: usuario });
+      if (!user) {
+        return done(null, false, console.log("error no existe usuario"));
+      }
+      if (user.password != password) {
+        return done(null, false, console.log("error en pasword"));
+      }
+      req.session.usuario = user;
+      return done(null, user);
     }
   )
 );
 
 passport.serializeUser((user, done) => {
-  done(null, user._id);
+  done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-  let usuario = obtenerUsuarioId(usuarios, id);
-  done(null, usuario);
+passport.deserializeUser(async (id, done) => {
+  const user = await Registro.findById(id);
+  done(null, user);
 });
 
 io.on("connection", (socket) => {
   console.log("conectando a sockets");
   Session.find().then((data) => {
-    io.sockets.emit("hola", data);
+    io.sockets.emit("login", data);
   });
   Producto.find().then((data) => {
     io.sockets.emit("envioProductos", data);
