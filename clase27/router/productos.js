@@ -2,12 +2,8 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 const Producto = require("../models/producto");
-const Registro = require("../models/resgistro");
 const passport = require("passport");
 
-router.get("/", function (req, res) {
-  res.render("main");
-});
 router.get("/listar", (req, res) => {
   try {
     Producto.find().then((data) => {
@@ -138,9 +134,8 @@ router.post(
 );
 
 router.delete("/logout", (req, res) => {
-  const nombre = req.session.usuario.usuario;
   req.session.destroy();
-  res.json(nombre);
+  res.redirect("/");
 });
 
 router.post(

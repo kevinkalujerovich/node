@@ -154,11 +154,10 @@ passport.deserializeUser(async (id, done) => {
   const user = await Registro.findById(id);
   done(null, user);
 });
+
 io.on("connection", (socket) => {
   console.log("conectando a sockets");
-  Session.find().then((data) => {
-    io.sockets.emit("login", data);
-  });
+
   Producto.find().then((data) => {
     io.sockets.emit("envioProductos", data);
   });
