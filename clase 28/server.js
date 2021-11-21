@@ -7,7 +7,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
 const app = express();
 const socketio = require("socket.io");
-
+require("dotenv").config({ path: "./.env" });
 const https = require("https");
 const fs = require("fs");
 const httpsOptions = {
@@ -120,8 +120,10 @@ passport.use(
   "facebook",
   new FacebookStrategy(
     {
-      clientID: "406184464381265",
-      clientSecret: "1bb135134609310b68bf54111e4e1388",
+      clientID: process.env.FACEBOOK_CLIENT_ID || "406184464381265",
+      clientSecret:
+        process.env.FACEBOOK_CLIENTE_SECRET ||
+        "1bb135134609310b68bf54111e4e1388",
       callbackURL: `https://localhost:${PORT}/productos/auth/facebook/datos`,
       profileFields: ["id", "displayName", "photos", "email"],
     },
