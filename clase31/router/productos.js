@@ -3,12 +3,29 @@ const router = express.Router();
 const path = require("path");
 const Producto = require("../models/producto");
 const passport = require("passport");
-const numCPUs = require("os").cpus().length;
 
 const { fork } = require("child_process");
 router.get("/listar", (req, res) => {
+  const log4js = require("log4js");
+
+  log4js.configure({
+    appenders: {
+      fileAppender: { type: "file", filename: "warn.log" },
+      consoleAppender: { type: "console" },
+    },
+    categories: {
+      default: { appenders: ["consoleAppender"], level: "info" },
+      console: { appenders: ["consoleAppender"], level: "info" },
+      file: { appenders: ["fileAppender"], level: "warn" },
+    },
+  });
+
   try {
     Producto.find().then((data) => {
+      const logger = log4js.getLogger();
+      logger.info(data);
+      const loggerFile = log4js.getLogger("file");
+      loggerFile.warn("Print warn");
       res.json({
         response: data,
         message: "Success",
@@ -16,6 +33,20 @@ router.get("/listar", (req, res) => {
       });
     });
   } catch (error) {
+    const log4js = require("log4js");
+
+    log4js.configure({
+      appenders: {
+        fileAppender: { type: "file", filename: "error.log" },
+        consoleAppender: { type: "console" },
+      },
+      categories: {
+        default: { appenders: ["consoleAppender"], level: "info" },
+        console: { appenders: ["consoleAppender"], level: "info" },
+        file: { appenders: ["fileAppender"], level: "error" },
+      },
+    });
+    logger.error(error);
     res.json({
       message: "Error",
       status: 404,
@@ -184,16 +215,16 @@ router.get("/info", (req, res) => {
     heapTotal:${process.memoryUsage().heapTotal},
     external:${process.memoryUsage().external},
     arrayBuffers:${process.memoryUsage().arrayBuffers}
-  },Argumentos de entrada:${process.argv},Cantidad de procesos:${numCPUs}`;
+  },Argumentos de entrada:${process.argv}`;
   res.json(datos);
 });
 
 router.get("/randoms", (req, res) => {
-  /*   const cantidad = parseInt(req.query.cant) || 100000000;
+  const cantidad = parseInt(req.query.cant) || 100000000;
   const computo = fork("./computo.js");
   computo.send(cantidad);
   computo.on("message", (sum) => res.send(sum));
-  console.log("Es no bloqueante!"); */
+  console.log("Es no bloqueante!");
 });
 
 module.exports = router;
