@@ -3,7 +3,9 @@ const router = express.Router();
 const path = require("path");
 const Producto = require("../models/producto");
 const passport = require("passport");
+const numCPUs = require("os").cpus().length;
 
+const { fork } = require("child_process");
 router.get("/listar", (req, res) => {
   try {
     Producto.find().then((data) => {
@@ -168,6 +170,30 @@ router.get("/datos", (req, res) => {
   } else {
     res.redirect("/index.html");
   }
+});
+
+router.get("/info", (req, res) => {
+  const datos = `Sistema operativo :${
+    process.platform
+  },Carpeta corriente:${process.cwd()},Process id:${
+    process.pid
+  },path de ejecucuon:${process.env.path},Version de Node: ${
+    process.version
+  },Uso de memoria:{
+    rss:${process.memoryUsage().rss},
+    heapTotal:${process.memoryUsage().heapTotal},
+    external:${process.memoryUsage().external},
+    arrayBuffers:${process.memoryUsage().arrayBuffers}
+  },Argumentos de entrada:${process.argv},Cantidad de procesos:${numCPUs}`;
+  res.json(datos);
+});
+
+router.get("/randoms", (req, res) => {
+  /*   const cantidad = parseInt(req.query.cant) || 100000000;
+  const computo = fork("./computo.js");
+  computo.send(cantidad);
+  computo.on("message", (sum) => res.send(sum));
+  console.log("Es no bloqueante!"); */
 });
 
 module.exports = router;
